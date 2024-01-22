@@ -1,6 +1,7 @@
 <template>
   <div class="accordion-item">
     <h2 class="accordion-header">
+      <!-- accrodion的開頭 -->
       <button
         class="accordion-button collapsed"
         type="button"
@@ -18,12 +19,15 @@
       data-bs-parent="#accordionExample"
     >
       <div class="accordion-body">
+        <!-- 每筆交易紀錄都用卡片包起來 -->
         <div
           class="card"
           v-for="(order, order_id) in order_list"
           :key="order_id"
         >
+          <!-- 交易紀錄的開頭 -->
           <div class="card-header">OrderID {{ order_id }}</div>
+          <!-- 用table呈現明細內容 -->
           <table class="table card-body">
             <thead>
               <tr>
@@ -67,13 +71,13 @@ export default {
     };
   },
   methods: {
+    // get method抓取每個用戶的交易紀錄
     initialOrder() {
       const promi = axios.get("http://localhost/orderGet.php", {
         params: { id: this.userId },
       });
       promi
         .then((response) => {
-          // console.log(response.data);
           if (response.data) {
             var obj = {};
             response.data.forEach((item) => {
@@ -104,17 +108,21 @@ export default {
           console.log(response);
         });
     },
+    // 計算總價
     totalCompute(order_id) {
       return this.total[order_id];
     },
   },
   created() {
+    // 在vue的生命週期『created』時觸發，大約是頁面剛開始加載時
     this.initialOrder();
   },
   computed: {
+    // 把id轉成字串，用來分辨每一個accordion元素
     stringUserId() {
       return "id" + this.userId.toString();
     },
+    // 把id轉成字串，用來分辨每一個accordion元素
     tagUserId() {
       return "#id" + this.userId.toString();
     },

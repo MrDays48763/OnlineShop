@@ -1,4 +1,5 @@
 <template>
+  <!-- 導覽列 -->
   <nav
     class="navbar navbar-expand-lg bg-body-tertiary bg-primary"
     data-bs-theme="dark"
@@ -8,27 +9,33 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
+            <!-- 後台連結 -->
             <router-link class="nav-link" to="/back">Back Stage</router-link>
           </li>
         </ul>
+        <!-- 顯示用戶名稱 -->
         <span class="navbar-text">{{ Username }}</span>
       </div>
     </div>
   </nav>
+  <!-- 本網站的根目錄，會導向登入畫面 -->
   <router-view />
 </template>
 <script>
 export default {
+  // 儲存用戶名稱
   data() {
     return {
       Username: "",
     };
   },
+  // listen mitt上的用戶資料
   mounted() {
     this.eventBus.on("userdata", (data) => {
       this.Username = data;
     });
   },
+  // 關閉mitt
   beforeUnmount() {
     this.eventBus.off("userdata");
   },

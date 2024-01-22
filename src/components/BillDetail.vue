@@ -18,10 +18,10 @@
           ></button>
         </div>
         <div class="modal-body">
+          <!-- 明細內容 -->
           <table class="table">
             <thead>
               <tr>
-                <!-- <th scope="col">編號</th> -->
                 <th scope="col">名稱</th>
                 <th scope="col">數量</th>
                 <th scope="col">價格</th>
@@ -29,7 +29,6 @@
             </thead>
             <tbody>
               <tr v-for="product in billData" :key="product.id">
-                <!-- <th scope="row">{{ product.id }}</th> -->
                 <td scope="row">{{ product.name }}</td>
                 <td>{{ product.amount }}</td>
                 <td>{{ product.totalPrice }}</td>
@@ -49,14 +48,16 @@
               id="flexCheckDefault"
               v-model="checked"
               :disabled="coupon"
-              @click="chagneDisplay"
+              @click="changeDisplay"
             />
+            <!-- 確認有無使用折價券 -->
             <label class="form-check-label" for="flexCheckDefault">
               使用折價券
             </label>
           </div>
         </div>
         <div class="modal-footer">
+          <!-- 關閉購買界面 -->
           <button
             type="button"
             class="btn btn-secondary"
@@ -64,6 +65,7 @@
           >
             關閉
           </button>
+          <!-- 購買按鈕 -->
           <button
             type="button"
             class="btn btn-primary"
@@ -92,6 +94,7 @@ export default {
     };
   },
   methods: {
+    // 傳送帳單資料到後端
     sendBill() {
       if (this.billData) {
         this.billData.forEach((item) => {
@@ -100,18 +103,8 @@ export default {
           params.append("product_id", item.id);
           params.append("user_id", 3);
           params.append("amount", item.amount);
-          // params.append("")
           axios
-            .post(
-              "http://localhost/orderInsert.php",
-              params
-              // {
-              //   id: 5,
-              //   product_id: item.id,
-              //   user_id: 2,
-              //   amount: item.amount,
-              // }
-            )
+            .post("http://localhost/orderInsert.php", params)
             .then(function (response) {
               console.log(response);
             })
@@ -121,6 +114,7 @@ export default {
         });
       }
     },
+    // 取得資料庫內最新的orderID
     getOrderID() {
       const promi = axios.get("http://localhost/orderIdGet.php");
       promi
@@ -131,7 +125,8 @@ export default {
           console.log(response);
         });
     },
-    chagneDisplay() {
+    // 改變折價券確認點擊後的外觀
+    changeDisplay() {
       if (this.checked) {
         this.totalDisplay = "";
       } else {
@@ -140,6 +135,7 @@ export default {
     },
   },
   computed: {
+    // 計算Total
     Total() {
       var total = 0;
       if (this.billData) {
@@ -149,6 +145,7 @@ export default {
       }
       return total;
     },
+    // 價錢＋量詞
     newPrice() {
       if (this.checked) {
         return this.Total * 0.8 + "元";
@@ -156,6 +153,7 @@ export default {
     },
   },
   created() {
+    // 在vue的生命週期『created』時觸發，大約是頁面剛開始加載時
     this.getOrderID();
   },
 };

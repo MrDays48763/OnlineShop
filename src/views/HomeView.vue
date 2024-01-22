@@ -1,10 +1,12 @@
 <template>
   <div class="home container mt-5">
     <div class="row row-cols-1 row-cols-md-3 g-4">
+      <!-- 商品區塊 -->
       <div class="col" v-for="product in product_list" :key="product.id">
         <div class="card text-center">
           <div class="row g-0 h-100">
             <div class="col-md-4">
+              <!-- 取得商品圖片 -->
               <img
                 :src="getImage(product.image)"
                 class="img-fluid rounded-start"
@@ -13,11 +15,14 @@
             </div>
             <div class="col-md-8">
               <div class="card-body">
+                <!-- 商品名稱 -->
                 <h5 class="card-title text-center">{{ product.name }}</h5>
               </div>
               <div class="card-footer bg-transparent">
+                <!-- 價格 -->
                 <div class="mb-3">定價${{ product.price }}</div>
                 <div class="form-floating">
+                  <!-- 購買數量 -->
                   <input
                     type="number"
                     class="form-control"
@@ -37,6 +42,7 @@
       </div>
     </div>
     <div class="my-5 text-center">
+      <!-- 按下按鈕開啟帳單 -->
       <button
         type="button"
         class="btn btn-primary"
@@ -48,12 +54,12 @@
         我要結帳
       </button>
     </div>
+    <!-- 帳單 -->
     <BillDetail :billData="createBill" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import BillDetail from "../components/BillDetail";
 import axios from "axios";
 export default {
@@ -64,14 +70,15 @@ export default {
   data() {
     return {
       product_list: [],
-      // orderID: 0,
     };
   },
   methods: {
+    // 用get method取得商品資料
     initialProduct() {
       const promi = axios.get("http://localhost/productGet.php");
       promi
         .then((response) =>
+          // 把每一筆回傳的資料存進product_list物件裡
           response.data.forEach((item) => {
             this.product_list.push({
               id: item.id,
@@ -87,32 +94,27 @@ export default {
           console.log(response);
         });
     },
+    // 修改圖片路徑
     getImage(imageURL) {
       return require("../assets/" + imageURL);
     },
+    // 計算價錢
     countPrice() {
       this.createBill.forEach((item) => {
         item.totalPrice = item.price * item.amount;
       });
     },
-    // getOrderID() {
-    //   const promi = axios.get("http://localhost/orderIdGet.php");
-    //   promi
-    //     .then(function (response) {
-    //       this.orderID = response.data.id;
-    //     })
-    //     .catch(function (response) {
-    //       console.log(response);
-    //     });
-    // },
   },
   created() {
+    // 在vue的生命週期『created』時觸發，大約是頁面剛開始加載時
     this.initialProduct();
   },
   computed: {
+    // 只保留用戶要買的商品
     createBill() {
       return this.product_list.filter((item) => item.amount > 0);
     },
+    // 如果商品數量皆為零，disable這顆按鈕
     buttonDisable() {
       return this.createBill.length ? false : true;
     },

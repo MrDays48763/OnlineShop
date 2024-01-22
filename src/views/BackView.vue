@@ -1,15 +1,9 @@
 <template>
   <div class="back container">
-    <!-- <nav class="navbar mb-5" style="background-color: #e3f2fd">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Order Database</a>
-        <div> -->
-    <!-- </div>
-      </div>
-    </nav> -->
     <div class="mt-3 row">
       <h1 class="col-md-1">Users</h1>
       <div class="col-md-1 offset-md-8" style="width: 300px">
+        <!-- 搜尋用的關鍵字，綁定query字串 -->
         <input
           type="text"
           class="form-control"
@@ -19,6 +13,7 @@
       </div>
     </div>
     <div class="accordion" id="accordionExample">
+      <!-- 每個用戶的購買紀錄 -->
       <OrderDetail
         v-for="user in searchList"
         :key="user.id"
@@ -43,6 +38,7 @@ export default {
     };
   },
   methods: {
+    // 取得所有的使用者
     initialUser() {
       const promi = axios.get("http://localhost/userGet.php");
       promi
@@ -57,11 +53,13 @@ export default {
     },
   },
   computed: {
+    // 搜尋符合關鍵字的用戶
     searchList() {
       return this.users_list.filter((item) => item.name.includes(this.query));
     },
   },
   created() {
+    // 在vue的生命週期『created』時觸發，大約是頁面剛開始加載時
     this.initialUser();
   },
 };
