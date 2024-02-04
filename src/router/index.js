@@ -35,7 +35,6 @@ router.beforeEach((to) => {
   if (to.name !== "login" && token == null) {
     return { name: "login" };
   } else {
-    console.log(token);
     store.commit("setUser", token);
   }
 });

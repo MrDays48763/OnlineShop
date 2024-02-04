@@ -61,7 +61,6 @@ export default {
     // 檢查帳號資料
     loginCheck() {
       // 用get method傳遞用戶資料到後端，確認用戶是否存在
-      console.log("checking...");
       const promi = axios.get("http://localhost/identity.php", {
         params: { id: this.UserID, username: this.Username },
       });
