@@ -5,11 +5,14 @@ import router from "./router";
 // 引入bootstrap
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap";
+
 // 引入mitt
-import mitt from "mitt";
+// import mitt from "mitt";
 
-const eventBus = mitt();
-const app = createApp(App);
+import store from "./store";
 
-app.config.globalProperties.eventBus = eventBus;
+// const eventBus = mitt();
+const app = createApp(App).use(store);
+
+// app.config.globalProperties.eventBus = eventBus;
 app.use(router).mount("#app");

@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       product_list: [],
-      UserID: "",
+      // UserID: "",
     };
   },
   methods: {
@@ -94,7 +94,6 @@ export default {
         .catch(function (response) {
           console.log(response);
         });
-      this.UserID = history.state.UserID;
     },
     getImage(imageURL) {
       return require("../assets/" + imageURL);
@@ -118,6 +117,10 @@ export default {
     // 如果商品數量皆為零，disable這顆按鈕
     buttonDisable() {
       return this.createBill.length ? false : true;
+    },
+    UserID() {
+      // return history.state.UserID;
+      return this.$store.state.UserID;
     },
   },
 };

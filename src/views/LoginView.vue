@@ -61,6 +61,7 @@ export default {
     // 檢查帳號資料
     loginCheck() {
       // 用get method傳遞用戶資料到後端，確認用戶是否存在
+      console.log("checking...");
       const promi = axios.get("http://localhost/identity.php", {
         params: { id: this.UserID, username: this.Username },
       });
@@ -73,16 +74,22 @@ export default {
           // 確認check的資料為true
           if (this.check) {
             // 用戶名稱打上mitt
-            this.eventBus.emit("userdata", {
-              Username: this.Username,
+            // this.eventBus.emit("userdata", {
+            //   Username: this.Username,
+            //   UserID: this.UserID,
+            // });
+            // this.$router.push({
+            //   name: "home",
+            //   state: {
+            //     UserID: this.UserID,
+            //   },
+            // });
+            this.$router.push("/");
+            this.$store.commit("setUser", {
               UserID: this.UserID,
+              Username: this.Username,
             });
-            this.$router.push({
-              name: "home",
-              state: {
-                UserID: this.UserID,
-              },
-            });
+            this.$store.getters.setStorage;
           } else {
             alert("帳號或密碼錯誤");
           }
