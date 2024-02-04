@@ -120,7 +120,8 @@ export default {
       const promi = axios.get("http://localhost/orderIdGet.php");
       promi
         .then((response) => {
-          this.orderID = Number(response.data.id) + 1;
+          this.orderID =
+            response.data == null ? 0 : Number(response.data.id) + 1;
         })
         .catch(function (response) {
           console.log(response);
