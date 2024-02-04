@@ -1,7 +1,7 @@
 <template>
   <div class="home container mt-5">
+    <!-- 商品區塊 -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <!-- 商品區塊 -->
       <div class="col" v-for="product in product_list" :key="product.id">
         <div class="card text-center">
           <div class="row g-0 h-100">
@@ -55,7 +55,7 @@
       </button>
     </div>
     <!-- 帳單 -->
-    <BillDetail :billData="createBill" />
+    <BillDetail :billData="createBill" :useriddata="UserID" />
   </div>
 </template>
 
@@ -70,6 +70,7 @@ export default {
   data() {
     return {
       product_list: [],
+      UserID: "",
     };
   },
   methods: {
@@ -93,8 +94,8 @@ export default {
         .catch(function (response) {
           console.log(response);
         });
+      this.UserID = history.state.UserID;
     },
-    // 修改圖片路徑
     getImage(imageURL) {
       return require("../assets/" + imageURL);
     },

@@ -5,12 +5,18 @@
     data-bs-theme="dark"
   >
     <div class="container">
-      <router-link class="navbar-brand" to="/home">Online Shop</router-link>
+      <router-link
+        class="navbar-brand"
+        :to="{ name: 'home', state: { UserID: UserID } }"
+        >Online Shop</router-link
+      >
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <!-- 後台連結 -->
-            <router-link class="nav-link" to="/back">Back Stage</router-link>
+            <router-link class="nav-link" to="/back" v-if="UserID == '0'">
+              Back Stage
+            </router-link>
           </li>
         </ul>
         <!-- 顯示用戶名稱 -->
@@ -27,17 +33,24 @@ export default {
   data() {
     return {
       Username: "",
+      // UserID: "",
     };
   },
   // listen mitt上的用戶資料
   mounted() {
     this.eventBus.on("userdata", (data) => {
-      this.Username = data;
+      this.Username = data.Username;
+      // this.UserID = data.UserID;
     });
   },
   // 關閉mitt
   beforeUnmount() {
     this.eventBus.off("userdata");
+  },
+  computed: {
+    UserID() {
+      return history.state.UserID;
+    },
   },
 };
 </script>

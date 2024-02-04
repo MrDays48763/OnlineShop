@@ -84,6 +84,7 @@ import axios from "axios";
 export default {
   props: {
     billData: Object,
+    useriddata: String,
   },
   data() {
     return {
@@ -101,7 +102,7 @@ export default {
           var params = new URLSearchParams();
           params.append("id", this.orderID);
           params.append("product_id", item.id);
-          params.append("user_id", 3);
+          params.append("user_id", this.useriddata);
           params.append("amount", item.amount);
           axios
             .post("http://localhost/orderInsert.php", params)

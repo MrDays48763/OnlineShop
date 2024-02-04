@@ -17,6 +17,7 @@
                     class="form-control"
                     placeholder="Name"
                     v-model="Username"
+                    required
                   />
                   <label class="form-label" for="typeName">Name</label>
                 </div>
@@ -28,6 +29,7 @@
                     class="form-control"
                     placeholder="User ID"
                     v-model="UserID"
+                    required
                   />
                   <label class="form-label" for="typePassword">User ID</label>
                 </div>
@@ -52,7 +54,7 @@ export default {
     return {
       UserID: "",
       Username: "",
-      check: {},
+      check: null,
     };
   },
   methods: {
@@ -64,18 +66,30 @@ export default {
       });
       promi
         .then((response) => {
-          // 如果存在會傳回用戶名稱，否則為null
+          // 如果存在會傳回true，否則為null
           this.check = response.data;
+        })
+        .then(() => {
+          // 確認check的資料為true
+          if (this.check) {
+            // 用戶名稱打上mitt
+            this.eventBus.emit("userdata", {
+              Username: this.Username,
+              UserID: this.UserID,
+            });
+            this.$router.push({
+              name: "home",
+              state: {
+                UserID: this.UserID,
+              },
+            });
+          } else {
+            alert("帳號或密碼錯誤");
+          }
         })
         .catch(function (response) {
           console.log(response);
         });
-      // 檢查check內有沒有用戶名稱
-      if (this.check !== {} && this.check !== null) {
-        // 用戶名稱打上mitt
-        this.eventBus.emit("userdata", this.Username);
-        this.$router.push("/home");
-      }
     },
   },
 };
