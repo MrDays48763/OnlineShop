@@ -28,7 +28,6 @@
         </ul>
         <!-- 顯示用戶名稱 -->
         <span class="navbar-text me-5">{{ Username }}</span>
-        <!-- class="container-fluid justify-content-end" -->
         <form class="d-flex" @submit.prevent="logout" v-if="Username">
           <button class="btn btn-outline-light me-2" type="submit">
             Logout
@@ -42,35 +41,19 @@
 </template>
 <script>
 export default {
-  // 儲存用戶名稱
-  data() {
-    return {
-      // Username: "",
-      // UserID: "",
-    };
-  },
-  // listen mitt上的用戶資料
-  // mounted() {
-  //   this.eventBus.on("userdata", (data) => {
-  //     this.Username = data.Username;
-  //     // this.UserID = data.UserID;
-  //   });
-  // },
-  // // 關閉mitt
-  // beforeUnmount() {
-  //   this.eventBus.off("userdata");
-  // },
   methods: {
+    // 登初時刪除token並導向至登入介面
     logout() {
       localStorage.removeItem("token");
       this.$router.push("/login");
     },
   },
   computed: {
+    // 從store拿userID
     UserID() {
-      // return history.state.UserID;
       return this.$store.state.UserID;
     },
+    // 從store拿username
     Username() {
       return this.$store.state.Username;
     },

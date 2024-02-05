@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">帳單</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Bill</h1>
           <button
             type="button"
             class="btn-close"
@@ -22,20 +22,20 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">名稱</th>
-                <th scope="col">數量</th>
-                <th scope="col">價格</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Price</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="product in billData" :key="product.id">
                 <td scope="row">{{ product.name }}</td>
                 <td>{{ product.amount }}</td>
-                <td>{{ product.totalPrice }}</td>
+                <td>NT${{ product.totalPrice }}</td>
               </tr>
               <tr>
-                <th scope="row">共</th>
-                <td :class="totalDisplay">{{ Total }}元</td>
+                <th scope="row">Total</th>
+                <td :class="totalDisplay">NT${{ Total }}</td>
                 <td>{{ newPrice }}</td>
               </tr>
             </tbody>
@@ -47,12 +47,12 @@
               value=""
               id="flexCheckDefault"
               v-model="checked"
-              :disabled="coupon"
+              :disabled="!coupondata.length"
               @click="changeDisplay"
             />
             <!-- 確認有無使用折價券 -->
             <label class="form-check-label" for="flexCheckDefault">
-              使用折價券
+              Coupon
             </label>
           </div>
         </div>
@@ -63,7 +63,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            關閉
+            Close
           </button>
           <!-- 購買按鈕 -->
           <button
@@ -72,7 +72,7 @@
             data-bs-dismiss="modal"
             @click="sendBill"
           >
-            確認購買
+            Confirm
           </button>
         </div>
       </div>
@@ -85,17 +85,17 @@ export default {
   props: {
     billData: Object,
     useriddata: String,
+    coupondata: Array,
   },
   data() {
     return {
       checked: false,
-      coupon: false,
       totalDisplay: "",
       orderID: 0,
     };
   },
   methods: {
-    // 傳送帳單資料到後端
+    // post帳單資料到後端
     sendBill() {
       if (this.billData) {
         this.billData.forEach((item) => {
@@ -104,11 +104,9 @@ export default {
           params.append("product_id", item.id);
           params.append("user_id", this.useriddata);
           params.append("amount", item.amount);
+          params.append("coupon_id", this.checked ? this.coupondata[0] : null);
           axios
             .post("http://localhost/orderInsert.php", params)
-            .then(function (response) {
-              console.log(response);
-            })
             .catch(function (response) {
               console.log(response);
             });

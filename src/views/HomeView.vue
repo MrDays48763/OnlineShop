@@ -20,7 +20,7 @@
               </div>
               <div class="card-footer bg-transparent">
                 <!-- 價格 -->
-                <div class="mb-3">定價${{ product.price }}</div>
+                <div class="mb-3">NT${{ product.price }}</div>
                 <div class="form-floating">
                   <!-- 購買數量 -->
                   <input
@@ -33,7 +33,7 @@
                     max="10"
                     v-model="product.amount"
                   />
-                  <label :for="product.id">數量</label>
+                  <label :for="product.id">Amount</label>
                 </div>
               </div>
             </div>
@@ -51,11 +51,15 @@
         @click="countPrice"
         :disabled="buttonDisable"
       >
-        我要結帳
+        Checkout
       </button>
     </div>
     <!-- 帳單 -->
-    <BillDetail :billData="createBill" :useriddata="UserID" />
+    <BillDetail
+      :billData="createBill"
+      :useriddata="UserID"
+      :coupondata="coupon_list"
+    />
   </div>
 </template>
 
@@ -70,7 +74,7 @@ export default {
   data() {
     return {
       product_list: [],
-      // UserID: "",
+      coupon_list: [],
     };
   },
   methods: {
@@ -95,6 +99,24 @@ export default {
           console.log(response);
         });
     },
+    // get折價券ID
+    initialCoupon() {
+      const promi = axios.get("http://localhost/couponGet.php", {
+        params: { id: this.UserID },
+      });
+      promi
+        .then((response) => {
+          if (response.data) {
+            response.data.forEach((item) => {
+              this.coupon_list.push(item.id);
+            });
+          }
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+    },
+    // 編輯商品圖片路徑
     getImage(imageURL) {
       return require("../assets/" + imageURL);
     },
@@ -108,6 +130,7 @@ export default {
   created() {
     // 在vue的生命週期『created』時觸發，大約是頁面剛開始加載時
     this.initialProduct();
+    this.initialCoupon();
   },
   computed: {
     // 只保留用戶要買的商品
@@ -118,8 +141,8 @@ export default {
     buttonDisable() {
       return this.createBill.length ? false : true;
     },
+    // 從store拿userID
     UserID() {
-      // return history.state.UserID;
       return this.$store.state.UserID;
     },
   },

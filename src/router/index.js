@@ -30,6 +30,7 @@ const router = createRouter({
   routes,
 });
 
+// 在導向每個頁面之前會先檢查登入狀態
 router.beforeEach((to) => {
   var token = JSON.parse(localStorage.getItem("token")); //token.UserID == "" ||
   if (to.name !== "login" && token == null) {

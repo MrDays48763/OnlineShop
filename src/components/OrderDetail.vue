@@ -46,7 +46,7 @@
               </tr>
               <tr>
                 <th scope="row" colspan="3">Total</th>
-                <td>{{ totalCompute(order_id) }}</td>
+                <td>{{ totalCompute(order_id, order[0].coupon_id) }}</td>
               </tr>
               <tr>
                 <th scope="row" colspan="3">CouponID</th>
@@ -109,8 +109,12 @@ export default {
         });
     },
     // 計算總價
-    totalCompute(order_id) {
-      return this.total[order_id];
+    totalCompute(order_id, coupon) {
+      if (coupon) {
+        return this.total[order_id] * 0.8;
+      } else {
+        return this.total[order_id];
+      }
     },
   },
   created() {
