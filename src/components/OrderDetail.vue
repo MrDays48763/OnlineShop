@@ -61,6 +61,7 @@
 </template>
 <script>
 import axios from "axios";
+const api = "http://localhost/";
 export default {
   name: "OrderDetail",
   props: ["userId", "userName"],
@@ -73,7 +74,7 @@ export default {
   methods: {
     // get method抓取每個用戶的交易紀錄
     initialOrder() {
-      const promi = axios.get("http://localhost/orderGet.php", {
+      const promi = axios.get(`${api}orderGet.php`, {
         params: { id: this.userId },
       });
       promi

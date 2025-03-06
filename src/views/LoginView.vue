@@ -49,6 +49,7 @@
 </template>
 <script>
 import axios from "axios";
+const api = "http://localhost/";
 export default {
   data() {
     return {
@@ -61,7 +62,7 @@ export default {
     // 檢查帳號資料
     loginCheck() {
       // 用get method傳遞用戶資料到後端，確認用戶是否存在
-      const promi = axios.get("http://localhost/identity.php", {
+      const promi = axios.get(`${api}identity.php`, {
         params: { id: this.UserID, username: this.Username },
       });
       promi

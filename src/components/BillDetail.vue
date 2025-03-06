@@ -81,6 +81,7 @@
 </template>
 <script>
 import axios from "axios";
+const api = "http://localhost/";
 export default {
   props: {
     billData: Object,
@@ -98,15 +99,31 @@ export default {
     // post帳單資料到後端
     sendBill() {
       if (this.billData) {
+        // this.billData.forEach((item) => {
+        //   var params = new URLSearchParams();
+        //   params.append("id", this.orderID);
+        //   params.append("product_id", item.id);
+        //   params.append("user_id", this.useriddata);
+        //   params.append("amount", item.amount);
+        //   params.append("coupon_id", this.checked ? this.coupondata[0] : null);
+        //   axios
+        //     .post(`${api}orderInsert.php`, params)
+        //     .catch(function (response) {
+        //       console.log(response);
+        //     });
+        // });
         this.billData.forEach((item) => {
-          var params = new URLSearchParams();
-          params.append("id", this.orderID);
-          params.append("product_id", item.id);
-          params.append("user_id", this.useriddata);
-          params.append("amount", item.amount);
-          params.append("coupon_id", this.checked ? this.coupondata[0] : null);
           axios
-            .post("http://localhost/orderInsert.php", params)
+            .post(`${api}orderInsert.php`, {
+              id: this.orderID,
+              product_id: item.id,
+              user_id: this.useriddata,
+              amount: item.amount,
+              coupon_id: this.checked ? this.coupondata[0] : null,
+            })
+            .then((response) => {
+              console.log(response.data);
+            })
             .catch(function (response) {
               console.log(response);
             });
@@ -115,7 +132,7 @@ export default {
     },
     // 取得資料庫內最新的orderID
     getOrderID() {
-      const promi = axios.get("http://localhost/orderIdGet.php");
+      const promi = axios.get(`${api}orderIdGet.php`);
       promi
         .then((response) => {
           this.orderID =

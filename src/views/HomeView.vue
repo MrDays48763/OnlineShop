@@ -66,6 +66,7 @@
 <script>
 import BillDetail from "../components/BillDetail";
 import axios from "axios";
+const api = "http://localhost/";
 export default {
   name: "HomeView",
   components: {
@@ -80,7 +81,7 @@ export default {
   methods: {
     // 用get method取得商品資料
     initialProduct() {
-      const promi = axios.get("http://localhost/productGet.php");
+      const promi = axios.get(`${api}productGet.php`);
       promi
         .then((response) =>
           // 把每一筆回傳的資料存進product_list物件裡
@@ -101,7 +102,7 @@ export default {
     },
     // get折價券ID
     initialCoupon() {
-      const promi = axios.get("http://localhost/couponGet.php", {
+      const promi = axios.get(`${api}couponGet.php`, {
         params: { id: this.UserID },
       });
       promi

@@ -26,6 +26,7 @@
 <script>
 import axios from "axios";
 import OrderDetail from "../components/OrderDetail";
+const api = "http://localhost/";
 export default {
   name: "BackView",
   components: {
@@ -40,7 +41,7 @@ export default {
   methods: {
     // 取得所有的使用者
     initialUser() {
-      const promi = axios.get("http://localhost/userGet.php");
+      const promi = axios.get(`${api}userGet.php`);
       promi
         .then((response) =>
           response.data.forEach((item) =>
